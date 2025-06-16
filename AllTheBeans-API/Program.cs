@@ -8,7 +8,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 if (builder.Environment.IsDevelopment())
 {
     var root = builder.Environment.ContentRootPath;
-    var dbPath = Path.Combine(root, "allTheBeans.db");
+    var dbPath = Path.Combine(root, "Data/allTheBeans.db");
     connectionString = $"Data Source={dbPath};";
 }
 
