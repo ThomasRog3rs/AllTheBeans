@@ -1,0 +1,7 @@
+﻿services:
+  allthebeans-api:
+    image: allthebeans-api
+    build:
+      context: .
+      dockerfile: AllTheBeans-API/Dockerfile
+
