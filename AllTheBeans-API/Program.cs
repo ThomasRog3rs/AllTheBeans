@@ -3,10 +3,19 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (builder.Environment.IsDevelopment())
+{
+    var root = builder.Environment.ContentRootPath;
+    var dbPath = Path.Combine(root, "allTheBeans.db");
+    connectionString = $"Data Source={dbPath};";
+}
+
 // Add services to the container.
 
 builder.Services.AddDbContext<CoffeeDbContext>(options => 
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(connectionString));
 
 builder.Services.AddControllers();
 
