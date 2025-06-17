@@ -30,7 +30,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         Console.WriteLine("Seeding database...");
-        await SeedData.Initialize(services);
+        var json = await File.ReadAllTextAsync("Data/coffees.json");
+        await SeedData.Initialize(services, json);
     }
     catch (Exception ex)
     {

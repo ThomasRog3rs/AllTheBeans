@@ -6,13 +6,12 @@ namespace AllTheBeans_API.Data;
 
 public static class SeedData
 {
-    public static async Task Initialize(IServiceProvider serviceProvider)
+    public static async Task Initialize(IServiceProvider serviceProvider, string json)
     {
         using (var context = new CoffeeDbContext(serviceProvider.GetRequiredService<DbContextOptions<CoffeeDbContext>>()))
         {
             await context.Database.EnsureCreatedAsync();
-
-            var json = await File.ReadAllTextAsync("Data/coffees.json");
+            
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
