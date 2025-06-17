@@ -25,7 +25,7 @@ public class BeanOfTheDayService
         if (todaysBean != null)
         {
             return await _dbContext.Coffees
-                .FirstOrDefaultAsync(coffee => coffee.Id == todaysBean.Id);
+                .FirstOrDefaultAsync(coffee => coffee.Id == todaysBean.BeanId);
         }
         
         var yesterday = DateTime.Now.Date.AddDays(-1);
