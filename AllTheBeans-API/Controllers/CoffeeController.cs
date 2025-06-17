@@ -19,7 +19,7 @@ public class CoffeeController : Controller
     }
     
     [HttpGet(Name = "GetAllCoffee")]
-    public async Task<IEnumerable<Coffee>> GetAllCoffee()
+    public async Task<List<Coffee>> GetAllCoffee()
     {
         //I am using ToListAsync to prevent thread blockin
         return await _context.Coffees.ToListAsync();

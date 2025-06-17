@@ -11,6 +11,11 @@ public static class SeedData
         using (var context = new CoffeeDbContext(serviceProvider.GetRequiredService<DbContextOptions<CoffeeDbContext>>()))
         {
             await context.Database.EnsureCreatedAsync();
+
+            if (await context.Coffees.AnyAsync())
+            {
+                return;
+            }
             
             var options = new JsonSerializerOptions
             {
