@@ -482,3 +482,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+/AllTheBeans-API/Data/allTheBeans.db
+/AllTheBeans-API/Data/allTheBeans.db-shm
+/AllTheBeans-API/Data/allTheBeans.db-wal
