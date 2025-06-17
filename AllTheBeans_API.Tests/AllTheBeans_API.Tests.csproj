@@ -24,4 +24,12 @@
     <ProjectReference Include="..\AllTheBeans-API\AllTheBeans-API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Data\coffees.json">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
