@@ -11,4 +11,13 @@ public class CoffeeDbContext : DbContext
     }
     
     public DbSet<Coffee> Coffees { get; set; }
+    public DbSet<BeanOfTheDayHistory> BeanOfTheDayHistory { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        //Lookups on the Date filed will be common, so adding an index for it will make the query more efficent
+        modelBuilder.Entity<BeanOfTheDayHistory>()
+            .HasIndex(botd => botd.Date)
+            .IsUnique();
+    }
 }

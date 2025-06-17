@@ -1,4 +1,5 @@
 using AllTheBeans_API.Data;
+using AllTheBeans_API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,8 @@ builder.Services.AddDbContext<CoffeeDbContext>(options =>
     options.UseSqlite(connectionString));
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<BeanOfTheDayService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
