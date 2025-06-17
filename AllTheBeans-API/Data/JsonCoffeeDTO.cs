@@ -12,7 +12,4 @@ public class JsonCoffeeDTO
     //For some reason in the json this is lowercase, but everything else is uppercase?
     [JsonPropertyName("colour")]
     public string Colour { get; set; } = string.Empty;
-    
-    [JsonPropertyName("isBOTD")]
-    public bool IsBeanOfTheDay { get; set; }
 }

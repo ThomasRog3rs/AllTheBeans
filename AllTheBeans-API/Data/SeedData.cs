@@ -36,7 +36,6 @@ public static class SeedData
                 Country = dto.Country,
                 Image = dto.Image,
                 Colour = dto.Colour,
-                IsBeanOfTheDay = dto.IsBeanOfTheDay,
                 Cost = decimal.Parse(
                     dto.Cost.Replace("£", ""),
                     NumberStyles.Currency,

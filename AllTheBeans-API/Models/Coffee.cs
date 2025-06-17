@@ -16,5 +16,4 @@ public class Coffee
     [Column(TypeName = "decimal(18, 2)")]
     public decimal Cost { get; set; }
     public string? Colour { get; set; }
-    public bool IsBeanOfTheDay { get; set; }
 }
