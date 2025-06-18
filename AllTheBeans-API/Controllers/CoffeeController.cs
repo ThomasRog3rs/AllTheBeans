@@ -86,19 +86,8 @@ public class CoffeeController : Controller
         var coffee = await _dbContext.Coffees.FindAsync(id);
         if (coffee == null)
             return NotFound();
-
-        if (coffeeDto.Name != null)
-            coffee.Name = coffeeDto.Name;
-        if (coffeeDto.Description != null)
-            coffee.Description = coffeeDto.Description;
-        if (coffeeDto.Country != null)
-            coffee.Country = coffeeDto.Country;
-        if (coffeeDto.Image != null)
-            coffee.Image = coffeeDto.Image;
-        if (coffeeDto.Cost.HasValue)
-            coffee.Cost = coffeeDto.Cost.Value;
-        if (coffeeDto.Colour != null)
-            coffee.Colour = coffeeDto.Colour;
+        
+        coffee.PatchFromDto(coffeeDto);
 
         await _dbContext.SaveChangesAsync();
 

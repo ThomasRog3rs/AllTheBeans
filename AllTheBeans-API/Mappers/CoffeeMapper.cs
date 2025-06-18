@@ -18,4 +18,14 @@ public static class CoffeeMapper
             IsBeanOfTheDay = await beanOfTheDayService.IsBeanOfTheDay(coffee.Id)
         };
     }
+    
+    public static void PatchFromDto(this Coffee coffee, CoffeeUpdateDTO dto)
+    {
+        if (dto.Name != null) coffee.Name = dto.Name;
+        if (dto.Description != null) coffee.Description = dto.Description;
+        if (dto.Country != null) coffee.Country = dto.Country;
+        if (dto.Image != null) coffee.Image = dto.Image;
+        if (dto.Cost.HasValue) coffee.Cost = dto.Cost.Value;
+        if (dto.Colour != null) coffee.Colour = dto.Colour;
+    }
 }
