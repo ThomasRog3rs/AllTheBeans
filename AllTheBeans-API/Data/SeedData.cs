@@ -2,6 +2,8 @@ using System.Globalization;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using AllTheBeans_API.Models;
+using AllTheBeans_API.Services;
+
 namespace AllTheBeans_API.Data;
 
 public static class SeedData
@@ -45,6 +47,10 @@ public static class SeedData
 
             await context.Coffees.AddRangeAsync(coffees);
             await context.SaveChangesAsync();
+            
+            //With new db, choose the first bean of the day
+            var beanOfTheDayService = new BeanOfTheDayService(context);
+            await beanOfTheDayService.GetBeanOfTheDay();
         }
     }
 }
