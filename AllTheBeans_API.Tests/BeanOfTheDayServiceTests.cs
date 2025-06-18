@@ -123,4 +123,48 @@ public class BeanOfTheDayServiceTests
         Assert.NotNull(result);
         Assert.Contains(result.Id, new[] { coffee1.Id, coffee2.Id });
     }
+    
+    [Fact]
+    public async Task IsBeanOfTheDay_Returns_True_If_Bean_Is_Today()
+    {
+        //arange
+        var dbName = Guid.NewGuid().ToString();
+        var context = GetDbContext(dbName);
+
+        var bean1 = new Coffee
+        {
+            Id = 1,
+            Name = "Coffee 1",
+            Country = "Brazil",
+            Cost = 9.99m
+        };
+
+        var bean2 = new Coffee
+        {
+            Id = 2,
+            Name = "Coffee 2",
+            Country = "Colombia",
+            Cost = 10.99m
+        };
+
+        context.Coffees.AddRange(bean1, bean2);
+        
+        //set bean1 as the bean of today
+        context.BeanOfTheDayHistory.Add(new BeanOfTheDayHistory
+        {
+            Date = DateTime.Now.Date,
+            BeanId = bean1.Id
+        });
+        context.SaveChanges();
+
+        var service = new BeanOfTheDayService(context);
+
+        //Act
+        var isBean1 = await service.IsBeanOfTheDay(bean1.Id);
+        var isBean2 = await service.IsBeanOfTheDay(bean2.Id);
+
+        //Assert
+        Assert.True(isBean1);
+        Assert.False(isBean2);
+    }
 }
