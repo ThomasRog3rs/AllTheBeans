@@ -47,4 +47,15 @@ public class CoffeeController : Controller
         var responseDto = await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService);
         return Ok(responseDto);
     }
+    
+    [HttpGet("{id}")]
+    public async Task<ActionResult<CoffeeResponseDTO>> GetCoffee(int id)
+    {
+        var coffee = await _dbContext.Coffees.FindAsync(id);
+
+        if (coffee == null)
+            return NotFound();
+    
+        return await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService);
+    }
 }
