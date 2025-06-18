@@ -104,4 +104,17 @@ public class CoffeeController : Controller
 
         return await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService);
     }
+    
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCoffee(int id)
+    {
+        var coffee = await _dbContext.Coffees.FindAsync(id);
+        if (coffee == null)
+            return NotFound();
+
+        _dbContext.Coffees.Remove(coffee);
+        await _dbContext.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
