@@ -15,11 +15,6 @@ public class CoffeeController : Controller
     private readonly CoffeeDbContext _dbContext;
     private readonly BeanOfTheDayService _beanOfTheDayService;
     
-    private bool CoffeeExists(int id)
-    {
-        return _dbContext.Coffees.Any(e => e.Id == id);
-    }
-
     public CoffeeController(ILogger<CoffeeController> logger, CoffeeDbContext context, BeanOfTheDayService beanOfTheDayService)
     {
         _logger = logger;
@@ -60,8 +55,11 @@ public class CoffeeController : Controller
     }
     
     [HttpPost]
-    public async Task<ActionResult<CoffeeResponseDTO>> CreateCoffee(CoffeeUpdateDTO coffeeToCreate)
+    public async Task<ActionResult<CoffeeResponseDTO>> CreateCoffee(CoffeeCreateDTO coffeeToCreate)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        
         //I don't want Id to be available here
         var coffee = new Coffee
         {
@@ -76,6 +74,34 @@ public class CoffeeController : Controller
         _dbContext.Coffees.Add(coffee);
         await _dbContext.SaveChangesAsync();
     
+        return await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService);
+    }
+    
+    [HttpPut("{id}")]
+    public async Task<ActionResult<CoffeeResponseDTO>> UpdateCoffee(int id, CoffeeUpdateDTO coffeeDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var coffee = await _dbContext.Coffees.FindAsync(id);
+        if (coffee == null)
+            return NotFound();
+
+        if (coffeeDto.Name != null)
+            coffee.Name = coffeeDto.Name;
+        if (coffeeDto.Description != null)
+            coffee.Description = coffeeDto.Description;
+        if (coffeeDto.Country != null)
+            coffee.Country = coffeeDto.Country;
+        if (coffeeDto.Image != null)
+            coffee.Image = coffeeDto.Image;
+        if (coffeeDto.Cost.HasValue)
+            coffee.Cost = coffeeDto.Cost.Value;
+        if (coffeeDto.Colour != null)
+            coffee.Colour = coffeeDto.Colour;
+
+        await _dbContext.SaveChangesAsync();
+
         return await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService);
     }
 }
