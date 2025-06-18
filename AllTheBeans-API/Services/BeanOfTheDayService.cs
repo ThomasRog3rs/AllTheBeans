@@ -50,5 +50,14 @@ public class BeanOfTheDayService
         
         return newBeanOfTheDay;
     }
+    public async Task<bool> IsBeanOfTheDay(int beanId)
+    {
+        var today = DateTime.Now.Date;
 
+        var todaysBean = await _dbContext.BeanOfTheDayHistory
+            .Where(bean => bean.Date == today)
+            .FirstOrDefaultAsync();
+        
+        return todaysBean?.BeanId == beanId;
+    }
 }
