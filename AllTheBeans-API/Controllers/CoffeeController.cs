@@ -58,4 +58,24 @@ public class CoffeeController : Controller
     
         return await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService);
     }
+    
+    [HttpPost]
+    public async Task<ActionResult<CoffeeResponseDTO>> CreateCoffee(CoffeeUpdateDTO coffeeToCreate)
+    {
+        //I don't want Id to be available here
+        var coffee = new Coffee
+        {
+            Name = coffeeToCreate.Name,
+            Description = coffeeToCreate.Description,
+            Country = coffeeToCreate.Country,
+            Image = coffeeToCreate.Image,
+            Cost = coffeeToCreate.Cost,
+            Colour = coffeeToCreate.Colour
+        };
+    
+        _dbContext.Coffees.Add(coffee);
+        await _dbContext.SaveChangesAsync();
+    
+        return await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService);
+    }
 }
