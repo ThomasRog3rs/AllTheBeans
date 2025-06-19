@@ -1,5 +1,9 @@
 [Tech Test 1 04.03.25.pdf](https://github.com/user-attachments/files/20804834/Tech.Test.1.04.03.25.pdf)
-
+# How to run both projects with Docker
+- prerequisite: Docker installed
+- After cloning the repo, run ```docker-compose up --build```
+- For frontend: [http://localhost:8080/](http://localhost:8080/)
+- For backend: [http://localhost:5001/swagger/index.html](http://localhost:5001/swagger/index.html)
 # My soloution to Scenario 2 - (AllTheBeans API)
 
 ## Assumptions made
@@ -45,7 +49,7 @@
     - An easy to use modern testing framework
   
 ## Testing
-In the root directory of the project run:
+In the ```/API``` directory run:
 ```dotnet test```
 Not 100% test coverage, a focus on buisness logic and using mochable dependencies
 
