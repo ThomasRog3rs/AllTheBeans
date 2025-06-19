@@ -16,6 +16,8 @@ RUN npm run build
 # Stage 2: Serve with nginx
 FROM nginx:1.25-alpine
 
+ENV VITE_API_BASE_PATH=http://localhost:5001/
+
 # Copy built assets from builder
 COPY --from=builder /app/dist /usr/share/nginx/html
 

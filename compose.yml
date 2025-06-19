@@ -1,0 +1,28 @@
+# /docker-compose.yml
+
+services:
+  # Frontend Vue.js Service
+  frontend:
+    build:
+      context: ./Client/AllTheBeans 
+      dockerfile: Dockerfile
+    container_name: allthebeans-frontend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      - VITE_API_BASE_PATH=http://backend
+    depends_on:
+      - backend
+
+  # Backend C#/.NET Service
+  backend:
+    build:
+      context: ./API/AllTheBeans-API
+      dockerfile: Dockerfile
+    container_name: allthebeans-backend
+    ports:
+      - "5001:80"
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_URLS=http://+:80
