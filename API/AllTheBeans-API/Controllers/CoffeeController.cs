@@ -106,4 +106,39 @@ public class CoffeeController : Controller
 
         return NoContent();
     }
+    
+    [HttpGet("search")]
+    public async Task<ActionResult<List<CoffeeResponseDTO>>> SearchBeans(
+        [FromQuery] string query
+    ) {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return BadRequest("A search query is required.");
+        }
+        
+        var lowerCaseQuery = query.ToLower();
+        
+        var coffees = await _dbContext.Coffees
+            .Where(
+                c =>
+                    c.Name.ToLower().Contains(lowerCaseQuery)
+                    || c.Country.ToLower().Contains(lowerCaseQuery)
+                    || c.Colour.ToLower().Contains(lowerCaseQuery)
+            )
+            .ToListAsync();//this is where the query is executed on the database (Iqueryable)
+
+        if (!coffees.Any())
+        {
+            return NotFound("No beans found matching your search.");
+        }
+
+        var responseDtos = await Task.WhenAll(
+            coffees.Select(
+                async coffee =>
+                    await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService)
+            )
+        );
+
+        return Ok(responseDtos.ToList());
+    }
 }
