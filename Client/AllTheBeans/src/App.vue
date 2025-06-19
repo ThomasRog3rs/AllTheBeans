@@ -8,6 +8,9 @@
 
     <!-- Bean of the Day -->
     <BeanOfTheDay :beanOfTheDay="beanOfTheDay" />
+
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>
 
@@ -15,6 +18,7 @@
 import NavBar from './components/NavBar.vue'
 import Hero from './components/Hero.vue'
 import BeanOfTheDay from './components/BeanOfTheDay.vue'
+import Footer from './components/Footer.vue'
 import type { CoffeeResponseDTO } from '@/../api-client/models/CoffeeResponseDTO'
 
 const beanOfTheDay: CoffeeResponseDTO = {
