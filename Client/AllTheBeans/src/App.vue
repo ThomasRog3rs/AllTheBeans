@@ -7,11 +7,19 @@
     <Hero />
 
     <!-- Bean of the Day -->
-    <BeanOfTheDay :beanOfTheDay="beanOfTheDay" />
+    <BeanOfTheDay />
 
     <!-- Single Bean Card Example -->
-    <section class="py-16">
-      <SingleBean :bean="beanOfTheDay" />
+    <section class="mx-auto px-12 py-12" v-if="beans.length > 0">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 p-12">
+        <div
+          v-for="(bean, index) in beans"
+          :key="bean.id"
+          class="group bg-white/60 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden hover:-translate-y-2 rounded-lg"
+        >
+          <SingleBean :bean="bean" />
+        </div>
+      </div>
     </section>
 
     <!-- Footer -->
@@ -26,34 +34,15 @@ import BeanOfTheDay from './components/BeanOfTheDay.vue'
 import Footer from './components/Footer.vue'
 import SingleBean from './components/SingleBean.vue'
 import type { CoffeeResponseDTO } from '@/../api-client/models/CoffeeResponseDTO'
-import { apiClient } from '@/apiClient';
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useCoffeeStore } from '@/stores/coffee.store'
 
-
-const beanOfTheDay: CoffeeResponseDTO = {
-  id: 1,
-  isBeanOfTheDay: false,
-  cost: 39.26,
-  image: 'https://images.unsplash.com/photo-1672306319681-7b6d7ef349cf',
-  colour: 'dark roast',
-  name: 'TURNABOUT',
-  description:
-    'Ipsum cupidatat nisi do elit veniam Lorem magna. Ullamco qui exercitation fugiat pariatur sunt dolore Lorem magna magna pariatur minim. Officia amet incididunt ad proident. Dolore est irure ex fugiat. Voluptate sunt qui ut irure commodo excepteur enim labore incididunt quis duis. Velit anim amet tempor ut labore sint deserunt.\r\n',
-  country: 'Peru',
-}
-
-async function fetchAllBeans() : Promise<CoffeeResponseDTO[]> {
-  try {
-    const response = await apiClient.apiCoffeeGetAllCoffeeGet();
-    return response;
-  } catch (error) {
-    console.error('Error fetching beans:', error);
-    return [];
-  }
-}
-
+const coffeeStore = useCoffeeStore();
+const beans = ref<CoffeeResponseDTO[]>([]);
 onMounted(async () => {
-  const beans : CoffeeResponseDTO[] = await fetchAllBeans();
-  console.log('Fetched beans:', beans);
+  coffeeStore.beanOfTheDay = await coffeeStore.getBeanOfTheDay();
+
+  beans.value = await coffeeStore.getAllCoffee();
+  console.log('Fetched beans:', beans.value);
 });
 </script>

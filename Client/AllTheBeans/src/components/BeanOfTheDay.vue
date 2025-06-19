@@ -67,10 +67,10 @@
 </template>
 
 <script setup lang="ts">
-import type { CoffeeResponseDTO } from '@/../api-client/models/CoffeeResponseDTO'
+import { useCoffeeStore } from '@/stores/coffee.store'
+import { storeToRefs } from 'pinia'
 import { MapPin as MapPinIcon, Flame as FlameIcon } from 'lucide-vue-next'
 
-defineProps<{
-  beanOfTheDay: CoffeeResponseDTO | null
-}>()
+const coffeeStore = useCoffeeStore()
+const { beanOfTheDay } = storeToRefs(coffeeStore)
 </script>
