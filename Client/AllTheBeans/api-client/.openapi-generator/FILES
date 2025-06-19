@@ -1,0 +1,9 @@
+.openapi-generator-ignore
+apis/CoffeeApi.ts
+apis/index.ts
+index.ts
+models/CoffeeCreateDTO.ts
+models/CoffeeResponseDTO.ts
+models/CoffeeUpdateDTO.ts
+models/index.ts
+runtime.ts
