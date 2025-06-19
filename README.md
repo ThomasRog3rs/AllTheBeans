@@ -61,6 +61,7 @@ Not 100% test coverage, a focus on buisness logic and using mochable dependencie
 5. Anyone with access to the API can make modifications without Authentication, Authirization or even rate-limiting
     - Since this is not a production application, I did feel this was out of scope
 6. If the application was to scale the pagination on the get endpoint would be required
+7. I would normally always have service layer between the controller and DbContext but it seemed overkill for this project
   
 
 # My soloution to Scenario 1 - (AllTheBeans UI)
