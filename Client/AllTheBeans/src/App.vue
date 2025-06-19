@@ -9,6 +9,11 @@
     <!-- Bean of the Day -->
     <BeanOfTheDay :beanOfTheDay="beanOfTheDay" />
 
+    <!-- Single Bean Card Example -->
+    <section class="py-16">
+      <SingleBean :bean="beanOfTheDay" />
+    </section>
+
     <!-- Footer -->
     <Footer />
   </div>
@@ -19,6 +24,7 @@ import NavBar from './components/NavBar.vue'
 import Hero from './components/Hero.vue'
 import BeanOfTheDay from './components/BeanOfTheDay.vue'
 import Footer from './components/Footer.vue'
+import SingleBean from './components/SingleBean.vue'
 import type { CoffeeResponseDTO } from '@/../api-client/models/CoffeeResponseDTO'
 
 const beanOfTheDay: CoffeeResponseDTO = {
