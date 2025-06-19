@@ -38,7 +38,7 @@
           {{ bean.cost?.toLocaleString('en-GB', { style: 'currency', currency: 'GBP' }) }}
         </span>
         <button
-          class="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white rounded-full px-6 py-2 text-sm font-medium transition-all"
+          class="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white rounded-full px-6 py-2 text-sm font-medium transition-all cursor-pointer"
         >
           Add to Cart
         </button>
