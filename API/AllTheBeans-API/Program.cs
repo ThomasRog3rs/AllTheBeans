@@ -13,6 +13,17 @@ if (builder.Environment.IsDevelopment())
     connectionString = $"Data Source={dbPath};";
 }
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowViteDev",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 // Add services to the container.
 
 builder.Services.AddDbContext<CoffeeDbContext>(options => 
@@ -26,6 +37,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseCors("AllowViteDev");
 
 using (var scope = app.Services.CreateScope())
 {
