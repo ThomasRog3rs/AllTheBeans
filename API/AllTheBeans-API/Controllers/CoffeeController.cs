@@ -51,7 +51,7 @@ public class CoffeeController : Controller
         if (coffee == null)
             return NotFound();
     
-        return await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService);
+        return Ok(await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService));
     }
     
     [HttpPost]
@@ -74,7 +74,7 @@ public class CoffeeController : Controller
         _dbContext.Coffees.Add(coffee);
         await _dbContext.SaveChangesAsync();
     
-        return await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService);
+        return Created("/Cofee/", await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService));
     }
     
     [HttpPut("{id}")]
@@ -91,7 +91,7 @@ public class CoffeeController : Controller
 
         await _dbContext.SaveChangesAsync();
 
-        return await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService);
+        return Ok(await CoffeeMapper.ToResponseDTO(coffee, _beanOfTheDayService));
     }
     
     [HttpDelete("{id}")]
