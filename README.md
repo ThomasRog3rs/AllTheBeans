@@ -130,7 +130,7 @@ public async Task<ActionResult<List<CoffeeResponseDTO>>> GetAllCoffee()
     var beanOfTheDay = await _beanOfTheDayService.GetBeanOfTheDay();
 
     var responseDtos = coffees
-        .Select(coffee => CoffeeMapper.ToResponseDTO(coffee, beanOfTheDay))
+        .Select(coffee => CoffeeMapper.ToResponseDTO(coffee, beanOfTheDay.Id))
         .ToList();
 
     return Ok(responseDtos);
