@@ -62,6 +62,100 @@ Not 100% test coverage, a focus on business logic and using mockable dependencie
     - Since this is not a production application, I did feel this was out of scope
 6. If the application was to scale the pagination on the get endpoint would be required
 7. I would normally always have service layer between the controller and DbContext but it seemed overkill for this project
+
+### ---- UPDATE ----
+There are some performace issues with this implimentation. In the Mapper there is a database call to get the bean of the day, which results in every item passed to the mapper having another call to the db.
+This could be mitigated in a number of ways:
+1. Just get the bean of the day then pass the bean of the day id into the mapper (only one extra db call on the request)
+2. Cache the bean of the day, possibly just in memory would be okay, then invalidate the cache when a new bean of the day is assigned (no extra call to the db)
+3. Bean of the day should have used a FK with a navigation property, then use an Include()
+
+Here is an example of the effected code:
+```csharp
+//Mapper
+public static async Task<CoffeeResponseDTO> ToResponseDTO(Coffee coffee, BeanOfTheDayService beanOfTheDayService)
+{
+    return new CoffeeResponseDTO
+    {
+        Id = coffee.Id,
+        Name = coffee.Name ?? string.Empty,
+        Description = coffee.Description ?? string.Empty,
+        Country = coffee.Country ?? string.Empty,
+        Image = coffee.Image ?? string.Empty,
+        Cost = coffee.Cost,
+        Colour = coffee.Colour ?? string.Empty,
+        IsBeanOfTheDay = await beanOfTheDayService.IsBeanOfTheDay(coffee.Id) //Db call every time
+    };
+}
+
+//beanOfTheDayService
+public async Task<bool> IsBeanOfTheDay(int beanId)
+{
+    var today = DateTime.Now.Date;
+
+    var todaysBean = await _dbContext.BeanOfTheDayHistory
+        .Where(bean => bean.Date == today)
+        .FirstOrDefaultAsync();
+    
+    return todaysBean?.BeanId == beanId;
+}
+```
+
+Here is a refactor to resolve the issue with getting all beans and checking which is the bean of the day:
+```csharp
+//Mapper
+public static CoffeeResponseDTO ToResponseDTO(
+    Coffee coffee,
+    int? beanOfTheDayId
+)
+{
+    return new CoffeeResponseDTO
+    {
+        Id = coffee.Id,
+        Name = coffee.Name ?? string.Empty,
+        Description = coffee.Description ?? string.Empty,
+        Country = coffee.Country ?? string.Empty,
+        Image = coffee.Image ?? string.Empty,
+        Cost = coffee.Cost,
+        Colour = coffee.Colour ?? string.Empty,
+        IsBeanOfTheDay = beanOfTheDayId.HasValue && coffee.Id == beanOfTheDayId.Value
+    };
+}
+
+//Controller
+[HttpGet("get-all-coffee")]
+public async Task<ActionResult<List<CoffeeResponseDTO>>> GetAllCoffee()
+{
+    var coffees = await _dbContext.Coffees.ToListAsync();
+    var beanOfTheDay = await _beanOfTheDayService.GetBeanOfTheDay();
+
+    var responseDtos = coffees
+        .Select(coffee => CoffeeMapper.ToResponseDTO(coffee, beanOfTheDay))
+        .ToList();
+
+    return Ok(responseDtos);
+}
+```
+
+Here is a refactor to resolve the issue with getting the bean of the day:
+```csharp
+//Model
+public class BeanOfTheDayHistory
+{
+    public int Id { get; set; }
+    public DateTime Date { get; set; }
+    public int BeanId { get; set; }
+
+    // Navigation property
+    [ForeignKey("BeanId")]
+    public Coffee Coffee { get; set; }
+}
+
+//Usage for getting the bean of the day - Now each BeanOfTheDayHistory object will have its Coffee property populated
+var historyWithCoffee = await _context.BeanOfTheDayHistory
+    .Include(b => b.Coffee)
+    .ToListAsync();
+```
   
 
 # My solution to Scenario 1 - (AllTheBeans UI)
